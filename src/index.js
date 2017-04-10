@@ -45,6 +45,7 @@ var APP, GL; // TODO: make them local references
  * @param {Boolean} [options.fastMode=false] - Enables faster rendering at cost of image quality. If performance is an issue, consider also removing effects
  * @param {Array} [options.effects=[]] - Which effects to enable. The only effect at the moment is 'shadows'
  * @param {Object} [options.style={ color: 'rgb(220, 210, 200)' }] - Sets the default building style
+ * @param {Boolean} [options.offscreen] - Should render to offscreen or not
  */
 
 var OSMBuildings = function(options) {

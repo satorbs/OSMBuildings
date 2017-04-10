@@ -170,31 +170,33 @@ var Color = function(r, g, b, a) {
   this.r = clamp(r, 1);
   this.g = clamp(g, 1);
   this.b = clamp(b, 1);
-  this.a = (a !== undefined ? clamp(a, 1) : 1);
+  this.a = clamp(a, 1) || 1;
 };
 
 /**
  * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)'
  */
 Color.parse = function(str) {
-  if (typeof str === 'string') {
-    str = str.toLowerCase();
-    str = w3cColors[str] || str;
+  if (typeof str !== 'string') {
+    return new Color();
+  }
 
-    var m;
+  str = str.toLowerCase();
+  str = w3cColors[str] || str;
 
-    if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
-      return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
-    }
+  var m;
 
-    if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
-      return new Color(
-        parseFloat(m[1])/255,
-        parseFloat(m[2])/255,
-        parseFloat(m[3])/255,
-        m[4] ? parseFloat(m[5]) : 1
-      );
-    }
+  if ((m = str.match(/^#?(\w{2})(\w{2})(\w{2})$/))) {
+    return new Color(parseInt(m[1], 16)/255, parseInt(m[2], 16)/255, parseInt(m[3], 16)/255);
+  }
+
+  if ((m = str.match(/rgba?\((\d+)\D+(\d+)\D+(\d+)(\D+([\d.]+))?\)/))) {
+    return new Color(
+      parseFloat(m[1])/255,
+      parseFloat(m[2])/255,
+      parseFloat(m[3])/255,
+      m[4] ? parseFloat(m[5]) : 1
+    );
   }
 };
 
@@ -258,7 +260,7 @@ Color.prototype = {
 
   toString: function() {
     if (this.r === undefined || this.g === undefined || this.b === undefined) {
-      return '';
+      return;
     }
 
     if (this.a === 1) {
@@ -305,7 +307,7 @@ Color.prototype = {
     return new Color(this.r, this.g, this.b, this.a*a);
   },
 
-  copy: function(l) {
+  copy: function() {
     return new Color(this.r, this.g, this.b, this.a);
   }
 
@@ -3015,11 +3017,16 @@ var triangulate = (function() {
 
   function varyColor(color, variance) {
     variance = variance || 0;
-    var c = Color.parse(color).toArray();
-    if (c === undefined) {
-      c = DEFAULT_COLOR;
+    var
+      parsedColor = Color.parse(color),
+      rgb;
+    if (!parsedColor) {
+      rgb = DEFAULT_COLOR;
+    } else {
+      rgb = parsedColor.toArray();
     }
-    return [c[0]+variance, c[1]+variance, c[2]+variance];
+    
+    return [rgb[0]+variance, rgb[1]+variance, rgb[2]+variance];
   }
 
   //***************************************************************************
@@ -3300,6 +3307,7 @@ var APP, GL; // TODO: make them local references
  * @param {Boolean} [options.fastMode=false] - Enables faster rendering at cost of image quality. If performance is an issue, consider also removing effects
  * @param {Array} [options.effects=[]] - Which effects to enable. The only effect at the moment is 'shadows'
  * @param {Object} [options.style={ color: 'rgb(220, 210, 200)' }] - Sets the default building style
+ * @param {Boolean} [options.offscreen] - Should render to offscreen or not
  */
 
 var OSMBuildings = function(options) {
