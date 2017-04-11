@@ -160,6 +160,9 @@ function hue2rgb(p, q, t) {
 }
 
 function clamp(v, max) {
+  if (v === undefined) {
+    return;
+  }
   return Math.min(max, Math.max(0, v || 0));
 }
 
@@ -167,9 +170,9 @@ function clamp(v, max) {
  * @param str, object can be in any of these: 'red', '#0099ff', 'rgb(64, 128, 255)', 'rgba(64, 128, 255, 0.5)', { r:0.2, g:0.3, b:0.9, a:1 }
  */
 var Color = function(r, g, b, a) {
-  this.r = clamp(r, 1);
-  this.g = clamp(g, 1);
-  this.b = clamp(b, 1);
+  this.r = clamp(r, 1) || 1;
+  this.g = clamp(g, 1) || 1;
+  this.b = clamp(b, 1) || 1;
   this.a = clamp(a, 1) || 1;
 };
 
@@ -3025,7 +3028,6 @@ var triangulate = (function() {
     } else {
       rgb = parsedColor.toArray();
     }
-    console.log('parsedColor:', parsedColor);
     
     return [rgb[0]+variance, rgb[1]+variance, rgb[2]+variance];
   }

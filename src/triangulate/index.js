@@ -154,7 +154,6 @@ var triangulate = (function() {
     } else {
       rgb = parsedColor.toArray();
     }
-    console.log('parsedColor:', parsedColor);
     
     return [rgb[0]+variance, rgb[1]+variance, rgb[2]+variance];
   }
