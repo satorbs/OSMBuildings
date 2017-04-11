@@ -45,6 +45,10 @@ module.exports = function(grunt) {
       'css': {
         src: 'src/style.css',
         dest: 'dist/OSMBuildings/<%=pkg.name%>.css'
+      },
+      'dist': {
+        src: 'dist/**/*',
+        dest: '../rmv/'
       }
     },
 
@@ -192,6 +196,7 @@ module.exports = function(grunt) {
 
     grunt.task.run('copy:assets');
     grunt.task.run('copy:css');
+    grunt.task.run('copy:dist');
 
     grunt.task.run('compress'); // zip a release bundle
   });
