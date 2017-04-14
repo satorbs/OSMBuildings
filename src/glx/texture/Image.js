@@ -74,6 +74,8 @@ GLX.texture.Image.prototype = {
     GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
 
     GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, image);
+    //GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, image.width, image.height, 0, GL.RGBA, GL.UNSIGNED_BYTE, null);  
+    
     GL.generateMipmap(GL.TEXTURE_2D);
 
     if (GL.anisotropyExtension) {

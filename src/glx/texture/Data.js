@@ -17,6 +17,7 @@ GLX.texture.Data = function(width, height, data, options) {
   }
 
   GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, bytes);
+  //GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, null);  
   GL.bindTexture(GL.TEXTURE_2D, null);
 };
 

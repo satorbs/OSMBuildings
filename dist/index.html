@@ -35,6 +35,10 @@
       top: 90px;
     }
 
+    .control.animate {
+      top: 135px;
+    }
+
     .control.zoom button{
       font-weight: normal;
     }
@@ -79,16 +83,26 @@
   <button class="inc">+</button>
 </div>
 
+<div class="control animate">
+  <button class="capture">capture</button>
+  <button class="play">play</button>
+</div>
+
 <script>
   var osmb = new OSMBuildings({
     baseURL: './OSMBuildings',
+    tilt: 60,
     zoom: 16,
     minZoom: 16,
     maxZoom: 19,
-    position: { latitude:52.52000, longitude:13.41000 },
+    position: { latitude: 35.796430, longitude: 139.682410},
     state: true, // stores map position/rotation in url
     effects: ['shadows'],
-    attribution: '© 3D <a href="https://osmbuildings.org/copyright/">OSM Buildings</a>'
+    style: {
+      wallColor: '#b0c4de',
+      roofColor: '#e6e6fa'
+    },
+    //fastMode: true
   }).appendTo('map');
 
   osmb.addMapTiles(
@@ -137,6 +151,17 @@
       if (parentClassList.contains('zoom')) {
         property = 'Zoom';
         increment = direction*1;
+      }
+
+      if (parentClassList.contains('animate')) {
+        osmb.screenshot(function(snapshot) {
+          var image = new Image();
+          image.onload = function() {
+            document.getElementById("map").appendChild(image);
+          }
+          image.src = snapshot;
+
+        });
       }
       if (property) {
         osmb['set'+ property](osmb['get'+ property]()+increment);

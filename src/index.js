@@ -680,7 +680,7 @@ OSMBuildings.prototype = {
    * @fires OSMBuildings#change
    */
   setTilt: function(tilt) {
-    tilt = clamp(parseFloat(tilt), 0, 45); // bigger max increases shadow moire on base map
+    tilt = clamp(parseFloat(tilt), 0, 70); // bigger max increases shadow moire on base map
     if (APP.tilt !== tilt) {
       APP.tilt = tilt;
 

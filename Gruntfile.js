@@ -47,8 +47,10 @@ module.exports = function(grunt) {
         dest: 'dist/OSMBuildings/<%=pkg.name%>.css'
       },
       'dist': {
-        src: 'dist/**/*',
-        dest: '../rmv/'
+        expand: true,
+        cwd: 'dist/',
+        src: 'OSMBuildings/*',
+        dest: '../rmv/lib/'
       }
     },
 

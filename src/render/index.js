@@ -153,6 +153,24 @@ var render = {
     }
 
     if (this.screenshotCallback) {
+
+      // temp code
+      /*var buffer = new Uint8Array(GL.canvas.width * GL.canvas.height * 4);
+      GL.readPixels(0, 0, GL.canvas.width, GL.canvas.height, GL.RGBA, GL.UNSIGNED_BYTE, buffer);
+      var canvas = document.createElement('canvas');
+      canvas.width = GL.canvas.width;
+      canvas.height = GL.canvas.height;
+      var context = canvas.getContext('2d');
+
+      // Copy the pixels to a 2D canvas
+      var imageData = context.createImageData(GL.canvas.width, GL.canvas.height);
+      imageData.data.set(buffer);
+      context.putImageData(imageData, 0, 0);
+
+      this.screenshotCallback(canvas.toDataURL());*/
+      /*var image = new Image();
+      image.src = canvas.toDataURL()*/
+
       this.screenshotCallback(GL.canvas.toDataURL());
       this.screenshotCallback = null;
     }  

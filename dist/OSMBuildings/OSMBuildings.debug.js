@@ -563,11 +563,12 @@ GLX.Buffer.prototype = {
 };
 
 
-GLX.Framebuffer = function(width, height, useDepthTexture) {
+GLX.Framebuffer = function(width, height, useDepthTexture, renderOffscreen) {
   if (useDepthTexture && !GL.depthTextureExtension)
     throw "Depth textures are not supported by your GPU";
     
   this.useDepthTexture = !!useDepthTexture;
+  this.renderOffscreen = !!renderOffscreen;
   this.setSize(width, height);
 };
 
@@ -1238,6 +1239,8 @@ GLX.texture.Image.prototype = {
     GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
 
     GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.UNSIGNED_BYTE, image);
+    //GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, image.width, image.height, 0, GL.RGBA, GL.UNSIGNED_BYTE, null);  
+    
     GL.generateMipmap(GL.TEXTURE_2D);
 
     if (GL.anisotropyExtension) {
@@ -1283,6 +1286,7 @@ GLX.texture.Data = function(width, height, data, options) {
   }
 
   GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, bytes);
+  //GL.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, width, height, 0, GL.RGBA, GL.UNSIGNED_BYTE, null);  
   GL.bindTexture(GL.TEXTURE_2D, null);
 };
 
@@ -3363,7 +3367,7 @@ var OSMBuildings = function(options) {
   }
 };
 
-OSMBuildings.VERSION = '3.2.4';
+OSMBuildings.VERSION = '3.2.5';
 OSMBuildings.ATTRIBUTION = '<a href="https://osmbuildings.org/">© OSM Buildings</a>';
 
 OSMBuildings.prototype = {
@@ -3945,7 +3949,7 @@ OSMBuildings.prototype = {
    * @fires OSMBuildings#change
    */
   setTilt: function(tilt) {
-    tilt = clamp(parseFloat(tilt), 0, 45); // bigger max increases shadow moire on base map
+    tilt = clamp(parseFloat(tilt), 0, 70); // bigger max increases shadow moire on base map
     if (APP.tilt !== tilt) {
       APP.tilt = tilt;
 
@@ -6345,6 +6349,24 @@ var render = {
     }
 
     if (this.screenshotCallback) {
+
+      // temp code
+      /*var buffer = new Uint8Array(GL.canvas.width * GL.canvas.height * 4);
+      GL.readPixels(0, 0, GL.canvas.width, GL.canvas.height, GL.RGBA, GL.UNSIGNED_BYTE, buffer);
+      var canvas = document.createElement('canvas');
+      canvas.width = GL.canvas.width;
+      canvas.height = GL.canvas.height;
+      var context = canvas.getContext('2d');
+
+      // Copy the pixels to a 2D canvas
+      var imageData = context.createImageData(GL.canvas.width, GL.canvas.height);
+      imageData.data.set(buffer);
+      context.putImageData(imageData, 0, 0);
+
+      this.screenshotCallback(canvas.toDataURL());*/
+      /*var image = new Image();
+      image.src = canvas.toDataURL()*/
+
       this.screenshotCallback(GL.canvas.toDataURL());
       this.screenshotCallback = null;
     }  
